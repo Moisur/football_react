@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import Footer from "./Components/Footer/Footer";
 import Header from "./Components/Header/Header";
 import Blog from "./Components/Pages/Blog/Blog";
 import Details from "./Components/Pages/Details/Details";
@@ -15,6 +16,7 @@ function App() {
         <Route path="/details" element={<Details/>}/>
         <Route path="/blog" element={<Blog/>}/>
       </Routes>
+      <Footer></Footer>
       </div>
   );
 }
