@@ -1,63 +1,65 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock, faUnlock } from '@fortawesome/free-solid-svg-icons'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import auth from '../../Firebase.init';
-import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import toast from 'react-hot-toast';
 const Login = () => {
     const [lock, setLock] = useState(false)
-    const [emailInfo,setEmail]=useState({
-        email:'',
-        password:'',
+    const [emailInfo, setEmail] = useState({
+        email: '',
+        password: '',
     })
-    const [errorInfo,setError]=useState({
-        email:'',
-        password:'',
+    const [errorInfo, setError] = useState({
+        email: '',
+        password: '',
     })
-     /* ===================  handel Email ======================= */
-     const handelEmail =(e)=>{
+    /* ===================  handel Email ======================= */
+    const handelEmail = (e) => {
         const result = (/\S+@\S+\.\S+/).test(e.target.value)
-        if(result){
-            setEmail({...emailInfo,email:e.target.value})
-            setError({...errorInfo,email:''})
-        }else{
-            setError({...errorInfo,email:'Not valid Email'})
-            setEmail({...emailInfo,email:''})
+        if (result) {
+            setEmail({ ...emailInfo, email: e.target.value })
+            setError({ ...errorInfo, email: '' })
+        } else {
+            setError({ ...errorInfo, email: 'Not valid Email' })
+            setEmail({ ...emailInfo, email: '' })
         }
     }
     /* ===================  handel Password ======================= */
-    const handelPassword =(e)=>{
-        const result =(e.target.value)
-        if(result.length>6){
-            setEmail({...emailInfo,password:e.target.value})
-            setError({...errorInfo,password:''})
-        }else{
-            setError({...errorInfo,password:'Not valid Password'})
-            setEmail({...emailInfo,password:''})
-           
+    const handelPassword = (e) => {
+        const result = (e.target.value)
+        if (result.length > 6) {
+            setEmail({ ...emailInfo, password: e.target.value })
+            setError({ ...errorInfo, password: '' })
+        } else {
+            setError({ ...errorInfo, password: 'Not valid Password' })
+            setEmail({ ...emailInfo, password: '' })
+
         }
     }
+    /* ======================= Signup ===================== */
+    const [signInWithEmailAndPassword, user,loading,error,]=useSignInWithEmailAndPassword(auth);
     /* ============================== Login ================================ */
-    const SignUp =(e)=>{
-        const email =emailInfo.email
-        const password =emailInfo.password
-        if(email=== '' && password===''){
+    const SignUp = (e) => {
+        const email = emailInfo.email
+        const password = emailInfo.password
+        if (email === '' && password === '') {
             toast.error("Enter you Email")
             return;
         }
-        console.log(email,password)
+        signInWithEmailAndPassword(email, password)
         e.preventDefault()
     }
-    /* ======================= ===================== */
-    // const [
-    //     signInWithEmailAndPassword,
-      
-    //   ] = useSignInWithEmailAndPassword(auth);
+    const Navigate=useNavigate()
+    if(user){
+        Navigate('/')
+        toast.success('Login Successg')
+    }
 
     /* ====================== Google with ====================== */
     const [signInWithGoogle] = useSignInWithGoogle(auth);
-    const GoogleSignUp =()=>{
+    const GoogleSignUp = () => {
         signInWithGoogle()
     }
     return (
@@ -67,7 +69,7 @@ const Login = () => {
                 <div className='text-slate-500 font-mono font-semibold'>
                     <div className='my-2'>
                         <label htmlFor="email">Enter  Email</label>
-                        <input onChange={handelEmail}  className='w-[100%] input-style py-2 px-2' type="email" id="email" required />
+                        <input onChange={handelEmail} className='w-[100%] input-style py-2 px-2' type="email" id="email" required />
                         <p className='text-[12px] text-red-600'>
                             {errorInfo.email}
                         </p>
@@ -82,7 +84,7 @@ const Login = () => {
                             }
                         </span>
                         <p className='text-[12px] text-red-600'>{errorInfo.password} </p>
-                        
+
 
                     </div>
                     <button onClick={SignUp} className='w-[100%] text-center text-white font-mono font-semibold bg-slate-400 py-1 rounded-lg'>Login</button>
