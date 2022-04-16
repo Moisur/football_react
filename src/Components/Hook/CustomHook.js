@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
-const CustomHook =()=>{
+const CustomHook =(url)=>{
     const [plyers,setPlyers]=useState([]) 
     useEffect(()=>{
-        fetch('https://www.thesportsdb.com/api/v1/json/2/searchplayers.php?p')
+        fetch(url)
         .then(res=>res.json())
-        .then(data=>setPlyers(data.player))
+        .then(data=>{
+            setPlyers(data.player)
+        })
     },[])
     return [plyers,setPlyers];
 }

@@ -2,14 +2,21 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons'
 import CustomLink from '../../CustomLink';
+import { Link, useLocation } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import auth from '../../Firebase.init';
+import { signOut } from 'firebase/auth';
 
 const Header = () => {
+    const Location=useLocation()
     const [menu, setMenu] = useState(false)
     const menubar = () => {
         setMenu(!menu)
     }
+    /* Login Work ===================== */
+    const [user] = useAuthState(auth);
     return (
-        <nav className="bg-gray-400 text-white">
+        <nav style={Location.pathname.includes('blog')?{display:"none"}:{display:"block"}} className="bg-gray-400 text-white sticky top-0 z-10" >
             <div className="max-w-7xl mx-auto px-2  sm:px-6 lg:px-8">
                 <div className="relative flex items-center justify-between h-16">
                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -26,15 +33,18 @@ const Header = () => {
                             <div className="flex space-x-4 ">
                                 <CustomLink to="/home" className=" px-3 py-2  text-sm font-medium" >Home</CustomLink>
 
-                                <CustomLink to="/plyers" className=" px-3 py-2  text-sm font-medium">Plyers</CustomLink>
+                                <CustomLink to={`/plyers`} className=" px-3 py-2  text-sm font-medium">Details</CustomLink>
 
-                                <CustomLink to="/details" className=" px-3 py-2  text-sm font-medium">Details</CustomLink>
+                                <CustomLink to="/details" className=" px-3 py-2  text-sm font-medium">Plyers</CustomLink>
 
                                 <CustomLink to="/blog" className=" px-3 py-2  text-sm font-medium">Blog</CustomLink>
                             </div>
                         </div>
                     </div>
-                    <button>Login</button>
+                    {
+                        user?.uid?<Link onClick={()=>signOut(auth)} to='/'>Logout</Link>:<Link to='/Register'>Register</Link>
+                    }
+                    
                 </div>
               
                 {
@@ -43,10 +53,9 @@ const Header = () => {
                             <div class="px-2 pt-2 pb-3 space-y-1">
                                 <CustomLink to="/home" className=" py-2 px-3  text-base font-medium" >Home</CustomLink>
 
-                                <CustomLink to="/plyers" className=" block px-3 py-2  text-base font-medium">Plyers</CustomLink>
+                                <CustomLink to="/plyers" className=" block px-3 py-2  text-base font-medium">Details</CustomLink>
 
-                                <CustomLink to="/details" className=" block px-3 py-2  text-base font-medium">Details</CustomLink>
-
+                                <CustomLink to="/details" className=" block px-3 py-2  text-base font-medium">Plyers</CustomLink>
                                 <CustomLink to="/blog" className=" block px-3 py-2  text-base font-medium">Blog</CustomLink>
                             </div>
                         </div>

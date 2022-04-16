@@ -1,0 +1,15 @@
+.register {
+    border-radius: 10px;
+    background: #e0e0e0;
+    box-shadow: 9px 9px 4px #bcbcbc,
+        -5px -5px 4px #f5f5f5;
+}
+
+.input-style {
+    border: none;
+    outline: none;
+    border-radius: 15px;
+    background: #f8f8f8;
+    box-shadow: 5px 5px 8px #d6cdcd,
+        -5px -5px 8px #dad6d6;
+}
